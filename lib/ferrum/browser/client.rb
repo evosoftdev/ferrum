@@ -14,6 +14,7 @@ module Ferrum
         @pendings = Concurrent::Hash.new
         @ws = WebSocket.new(ws_url, @browser.ws_max_receive_size, @browser.logger)
         @subscriber, @interrupter = Subscriber.build(2)
+        @session_id = nil
 
         @thread = Thread.new do
           Thread.current.abort_on_exception = true
@@ -70,10 +71,25 @@ module Ferrum
         @thread.kill unless @thread.join(1)
       end
 
+      # TODO: test
+      # @param [String] session_id
+      def session!(session_id)
+        @session_id = session_id
+      end
+
+      # TODO: test
+      # @param [Integer] value
+      def increase_command_id(value)
+        @command_id += value
+        self
+      end
+
       private
 
+      # TODO: test
       def build_message(method, params)
-        { method: method, params: params }.merge(id: next_command_id)
+        message = { method: method, params: params }.merge(id: next_command_id)
+        @session_id.nil? ? message : message.merge(sessionId: @session_id)
       end
 
       def next_command_id

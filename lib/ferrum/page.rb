@@ -56,10 +56,7 @@ module Ferrum
       @target_id = target_id
       @event = Event.new.tap(&:set)
 
-      host = @browser.process.host
-      port = @browser.process.port
-      ws_url = "ws://#{host}:#{port}/devtools/page/#{@target_id}"
-      @client = Browser::Client.new(browser, ws_url, id_starts_with: 1000)
+      @client = browser.client.increase_command_id 1000
 
       @mouse = Mouse.new(self)
       @keyboard = Keyboard.new(self)
@@ -251,7 +248,10 @@ module Ferrum
       end
     end
 
+    # TODO: test
     def prepare_page
+      @client.session! context.default_target.session
+
       command("Page.enable")
       command("Runtime.enable")
       command("DOM.enable")

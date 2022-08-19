@@ -8,10 +8,12 @@ module Ferrum
     # where we enhance page class and build page ourselves.
     attr_writer :page
 
+    # TODO: test
     def initialize(browser, params = nil)
       @page = nil
       @browser = browser
       @params = params
+      @sessions = Concurrent::Array.new
     end
 
     def update(params)
@@ -60,6 +62,21 @@ module Ferrum
     def maybe_sleep_if_new_window
       # Dirty hack because new window doesn't have events at all
       sleep(NEW_WINDOW_WAIT) if window?
+    end
+
+    # TODO: test
+    # @return [String]
+    def session
+      @sessions.first || add_session
+    end
+
+    # TODO: test
+    # @return [String]
+    def add_session
+      session = @browser.command("Target.attachToTarget", targetId: id, flatten: true)
+      session_id = session["sessionId"]
+      @sessions.push session_id
+      session_id
     end
   end
 end
