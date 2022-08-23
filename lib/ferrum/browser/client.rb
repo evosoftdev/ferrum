@@ -20,6 +20,8 @@ module Ferrum
         @subscriber, @interrupter = Subscriber.build(2)
         @session_id = nil
 
+        message_base!
+
         @thread = Thread.new do
           Thread.current.abort_on_exception = true
           Thread.current.report_on_exception = true if Thread.current.respond_to?(:report_on_exception=)
