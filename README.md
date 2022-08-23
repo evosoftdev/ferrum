@@ -53,6 +53,7 @@ based on Ferrum and Mechanize.
 * [Development](https://github.com/rubycdp/ferrum#development)
 * [Contributing](https://github.com/rubycdp/ferrum#contributing)
 * [License](https://github.com/rubycdp/ferrum#license)
+* [Selenoid](#selenoid)
 
 
 ## Install
@@ -1253,3 +1254,21 @@ Bug reports and pull requests are welcome on [GitHub](https://github.com/rubycdp
 
 The gem is available as open source under the terms of the
 [MIT License](https://opensource.org/licenses/MIT).
+
+## Selenoid
+
+* [github.com](https://github.com/aerokube/selenoid)
+
+Tested for:
+
+* [aerokube/selenoid:latest-release](https://hub.docker.com/r/aerokube/selenoid) from `Jul 12, 2022 at 7:49 pm`.
+* [aerokube/selenoid-ui](https://hub.docker.com/r/aerokube/selenoid-ui) from `Jun 22, 2022 at 11:12 am`
+
+Code sample:
+```ruby
+require('ferrum')
+
+browser = Ferrum::Browser.new ws_url: "ws://localhost:4444/devtools/eaa59a10003231f2a370a8df893ad7da"
+browser.go_to("https://example.com/")
+browser.at_css('a').click
+```

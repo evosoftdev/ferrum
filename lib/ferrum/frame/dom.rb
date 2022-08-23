@@ -20,6 +20,12 @@
 module Ferrum
   class Frame
     module DOM
+      AT_CSS_JS = <<~JS
+          function(selector, within) {
+            return (within || document).querySelector(selector);
+          }
+      JS
+
       def current_url
         evaluate("window.top.location.href")
       end
@@ -40,9 +46,7 @@ module Ferrum
         expr = <<~JS
           function(selector, within) {
             let results = [];
-            within ||= document
-
-            let xpath = document.evaluate(selector, within, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+            let xpath = document.evaluate(selector, (within || document), null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
             for (let i = 0; i < xpath.snapshotLength; i++) {
               results.push(xpath.snapshotItem(i));
             }
@@ -57,8 +61,7 @@ module Ferrum
       def at_xpath(selector, within: nil)
         expr = <<~JS
           function(selector, within) {
-            within ||= document
-            let xpath = document.evaluate(selector, within, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+            let xpath = document.evaluate(selector, (within || document), null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
             return xpath.snapshotItem(0);
           }
         JS
@@ -68,8 +71,7 @@ module Ferrum
       def css(selector, within: nil)
         expr = <<~JS
           function(selector, within) {
-            within ||= document
-            return Array.from(within.querySelectorAll(selector));
+            return Array.from((within || document).querySelectorAll(selector));
           }
         JS
 
@@ -77,14 +79,7 @@ module Ferrum
       end
 
       def at_css(selector, within: nil)
-        expr = <<~JS
-          function(selector, within) {
-            within ||= document
-            return within.querySelector(selector);
-          }
-        JS
-
-        evaluate_func(expr, selector, within)
+        evaluate_func(AT_CSS_JS, selector, within)
       end
     end
   end

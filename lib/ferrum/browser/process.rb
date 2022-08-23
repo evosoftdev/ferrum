@@ -63,6 +63,13 @@ module Ferrum
       def initialize(options)
         @pid = @xvfb = @user_data_dir = nil
 
+        # TODO: test
+        if options[:ws_url]
+          self.ws_url= options[:ws_url]
+          parse_browser_versions
+          return
+        end
+
         if options[:url]
           url = URI.join(options[:url].to_s, "/json/version")
           response = JSON.parse(::Net::HTTP.get(url))
@@ -164,11 +171,12 @@ module Ferrum
         @port = @ws_url.port
       end
 
+      # TODO: test
       def parse_browser_versions
         return unless ws_url.is_a?(Addressable::URI)
 
-        version_url = URI.parse(ws_url.merge(scheme: "http", path: "/json/version"))
-        response = JSON.parse(::Net::HTTP.get(version_url))
+        response = request_json_version
+        return if response.nil?
 
         @v8_version = response["V8-Version"]
         @browser_version = response["Browser"]
@@ -182,6 +190,19 @@ module Ferrum
           io.close unless io.closed?
         rescue IOError
           raise unless RUBY_ENGINE == "jruby"
+        end
+      end
+
+      # TODO: test
+      def request_json_version
+        version_url = URI.parse(ws_url.merge(scheme: "http", path: "/json/version"))
+        response = ::Net::HTTP.get(version_url)
+        begin
+          JSON.parse response
+        rescue JSON::ParserError => e
+          # It's fine when You are using Selenoid .....!
+          @logger&.puts(e.message)
+          nil
         end
       end
     end
