@@ -8,7 +8,6 @@ module Ferrum
     class Client
       INTERRUPTIONS = %w[Fetch.requestPaused Fetch.authRequired].freeze
 
-      # TODO: test
       # @param [Browser] browser
       # @param [String] ws_url
       # @param [Integer] id_starts_with
@@ -77,7 +76,6 @@ module Ferrum
         @thread.kill unless @thread.join(1)
       end
 
-      # TODO: test
       # @param [String] session_id
       def session!(session_id)
         @session_id = session_id
@@ -89,16 +87,14 @@ module Ferrum
         @session_id
       end
 
-      # TODO: test
       # @param [Integer] value
-      def increase_command_id(value)
+      def increase_command_id!(value)
         @command_id += value
         self
       end
 
       private
 
-      # TODO: test
       def build_message(method, params)
         @message_base.merge method: method,
                             params: params,
@@ -127,7 +123,6 @@ module Ferrum
         end
       end
 
-      # TODO: test
       def message_base!
         @message_base = @session_id.nil? ? {} : { sessionId: @session_id }
       end
