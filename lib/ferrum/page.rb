@@ -55,7 +55,7 @@ module Ferrum
       @browser = browser
       @target_id = target_id
       @event = Event.new.tap(&:set)
-
+      # TODO: use browser.client instead own @client
       @client = browser.client.increase_command_id 1000
 
       @mouse = Mouse.new(self)

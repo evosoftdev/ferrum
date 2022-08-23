@@ -8,6 +8,10 @@ module Ferrum
     class Client
       INTERRUPTIONS = %w[Fetch.requestPaused Fetch.authRequired].freeze
 
+      # TODO: test
+      # @param [Browser] browser
+      # @param [String] ws_url
+      # @param [Integer] id_starts_with
       def initialize(browser, ws_url, id_starts_with: 0)
         @browser = browser
         @command_id = id_starts_with
@@ -75,6 +79,12 @@ module Ferrum
       # @param [String] session_id
       def session!(session_id)
         @session_id = session_id
+        message_base!
+      end
+
+      # @return [String]
+      def session_id
+        @session_id
       end
 
       # TODO: test
@@ -88,8 +98,9 @@ module Ferrum
 
       # TODO: test
       def build_message(method, params)
-        message = { method: method, params: params }.merge(id: next_command_id)
-        @session_id.nil? ? message : message.merge(sessionId: @session_id)
+        @message_base.merge method: method,
+                            params: params,
+                            id: next_command_id
       end
 
       def next_command_id
@@ -112,6 +123,11 @@ module Ferrum
         else
           raise BrowserError, error
         end
+      end
+
+      # TODO: test
+      def message_base!
+        @message_base = @session_id.nil? ? {} : { sessionId: @session_id }
       end
     end
   end
