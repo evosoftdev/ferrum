@@ -62,10 +62,10 @@ module Ferrum
 
       def initialize(options)
         @pid = @xvfb = @user_data_dir = nil
+        @logger = options[:logger]
 
-        # TODO: test
         if options[:ws_url]
-          self.ws_url= options[:ws_url]
+          self.ws_url = options[:ws_url]
           parse_browser_versions
           return
         end
@@ -78,7 +78,6 @@ module Ferrum
           return
         end
 
-        @logger = options[:logger]
         @process_timeout = options.fetch(:process_timeout, PROCESS_TIMEOUT)
         @env = Hash(options[:env])
 
@@ -171,7 +170,6 @@ module Ferrum
         @port = @ws_url.port
       end
 
-      # TODO: test
       def parse_browser_versions
         return unless ws_url.is_a?(Addressable::URI)
 
@@ -193,7 +191,6 @@ module Ferrum
         end
       end
 
-      # TODO: test
       def request_json_version
         version_url = URI.parse(ws_url.merge(scheme: "http", path: "/json/version"))
         response = ::Net::HTTP.get(version_url)

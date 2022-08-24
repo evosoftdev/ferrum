@@ -2,6 +2,7 @@
 
 require "bundler/setup"
 require "rspec"
+require "webmock/rspec"
 
 PROJECT_ROOT = File.expand_path("..", __dir__)
 %w[/lib /spec].each { |p| $LOAD_PATH.unshift(p) }
@@ -9,6 +10,7 @@ PROJECT_ROOT = File.expand_path("..", __dir__)
 require "ferrum"
 require "support/server"
 require "support/global_helpers"
+require "support/sequences"
 
 # GA servers are slow it's better to increase
 ENV["FERRUM_NEW_WINDOW_WAIT"] ||= "0.8" if ENV["CI"]
@@ -17,6 +19,8 @@ puts ""
 command = Ferrum::Browser::Command.build({}, nil)
 puts `'#{command.path}' --version`
 puts ""
+
+WebMock.allow_net_connect!
 
 RSpec.configure do |config|
   ferrum_logger = nil
@@ -83,4 +87,6 @@ RSpec.configure do |config|
   rescue StandardError => e
     puts "#{e.class}: #{e.message}"
   end
+
+  config.include Sequences
 end
