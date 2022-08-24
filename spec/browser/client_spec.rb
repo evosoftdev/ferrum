@@ -4,7 +4,6 @@ module Ferrum
   class Browser
     describe Client do
       let(:result)    { rand }
-      let(:browser)   { Ferrum::Browser.new base_url: Ferrum::Server.server.base_url }
       let(:ws_url)    { "ws://127.0.0.1" }
       let(:instance)  { described_class.new browser, ws_url }
 

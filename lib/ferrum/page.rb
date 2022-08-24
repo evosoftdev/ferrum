@@ -164,11 +164,9 @@ module Ferrum
       @browser.command("Browser.getWindowForTarget", targetId: @target_id)["windowId"]
     end
 
-    # rubocop:disable Naming/AccessorMethodName
     def set_window_bounds(bounds = {})
       @browser.command("Browser.setWindowBounds", windowId: window_id, bounds: bounds)
     end
-    # rubocop:enable Naming/AccessorMethodName
 
     def command(method, wait: 0, slowmoable: false, **params)
       iteration = @event.reset if wait.positive?
@@ -248,9 +246,8 @@ module Ferrum
       end
     end
 
-    # TODO: test
     def prepare_page
-      @client.session! context.default_target.session
+      @client.session! context.default_target.session_id
 
       command("Page.enable")
       command("Runtime.enable")

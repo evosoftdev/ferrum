@@ -23,6 +23,8 @@ puts ""
 WebMock.allow_net_connect!
 
 RSpec.configure do |config|
+  include Sequences
+
   ferrum_logger = nil
   config.include_context "Global helpers"
 
@@ -31,17 +33,7 @@ RSpec.configure do |config|
   end
 
   config.before(:all) do
-    base_url = Ferrum::Server.server.base_url
-    options = { base_url: base_url }
-    options.merge!(headless: false) if ENV["HEADLESS"] == "false"
-    options.merge!(slowmo: ENV["SLOWMO"].to_f) if ENV["SLOWMO"].to_f > 0
-
-    if ENV["CI"]
-      ferrum_logger = StringIO.new
-      options.merge!(logger: ferrum_logger)
-    end
-
-    @browser = Ferrum::Browser.new(**options)
+    @browser = browser
   end
 
   config.after(:all) do
@@ -58,7 +50,7 @@ RSpec.configure do |config|
   end
 
   config.after(:each) do |example|
-    save_exception_artifacts(browser, example.metadata, ferrum_logger) if ENV.fetch("CI", nil) && example.exception
+    save_exception_artifacts(@browser, example.metadata, ferrum_logger) if ENV.fetch("CI", nil) && example.exception
 
     reset
   end
@@ -87,6 +79,4 @@ RSpec.configure do |config|
   rescue StandardError => e
     puts "#{e.class}: #{e.message}"
   end
-
-  config.include Sequences
 end
