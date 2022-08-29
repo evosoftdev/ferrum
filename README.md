@@ -1272,3 +1272,7 @@ browser = Ferrum::Browser.new ws_url: "ws://localhost:4444/devtools/eaa59a100032
 browser.go_to("https://example.com/")
 browser.at_css('a').click
 ```
+
+`eaa59a10003231f2a370a8df893ad7da` is a `sessionId` from `curl` response.
+You can find a `curl` query in `Selenoid` web server (see `selenoid-ui` above).
+Start `selenoid-ui` on `8080` port and go to `http://localhost:8080/#/capabilities/`, than chose `Curl`. Execute curl in terminal.

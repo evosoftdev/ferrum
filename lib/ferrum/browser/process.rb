@@ -198,6 +198,8 @@ module Ferrum
           JSON.parse response
         rescue JSON::ParserError => e
           # It's fine when You are using Selenoid .....!
+          return nil if response.include? "Selenoid"
+
           @logger&.puts(e.message)
           nil
         end
