@@ -28,31 +28,31 @@ based on Ferrum and Mechanize.
 
 ## Index
 
-* [Install](https://github.com/rubycdp/ferrum#install)
-* [Examples](https://github.com/rubycdp/ferrum#examples)
-* [Docker](https://github.com/rubycdp/ferrum#docker)
-* [Customization](https://github.com/rubycdp/ferrum#customization)
-* [Navigation](https://github.com/rubycdp/ferrum#navigation)
-* [Finders](https://github.com/rubycdp/ferrum#finders)
-* [Screenshots](https://github.com/rubycdp/ferrum#screenshots)
-* [Cleaning Up](https://github.com/rubycdp/ferrum#cleaning-up)
-* [Network](https://github.com/rubycdp/ferrum#network)
-* [Proxy](https://github.com/rubycdp/ferrum#proxy)
-* [Mouse](https://github.com/rubycdp/ferrum#mouse)
-* [Keyboard](https://github.com/rubycdp/ferrum#keyboard)
-* [Cookies](https://github.com/rubycdp/ferrum#cookies)
-* [Headers](https://github.com/rubycdp/ferrum#headers)
-* [JavaScript](https://github.com/rubycdp/ferrum#javascript)
-* [Frames](https://github.com/rubycdp/ferrum#frames)
-* [Frame](https://github.com/rubycdp/ferrum#frame)
-* [Dialogs](https://github.com/rubycdp/ferrum#dialogs)
-* [Animation](https://github.com/rubycdp/ferrum#animation)
-* [Node](https://github.com/rubycdp/ferrum#node)
-* [Tracing](https://github.com/rubycdp/ferrum#tracing)
-* [Thread safety](https://github.com/rubycdp/ferrum#thread-safety)
-* [Development](https://github.com/rubycdp/ferrum#development)
-* [Contributing](https://github.com/rubycdp/ferrum#contributing)
-* [License](https://github.com/rubycdp/ferrum#license)
+* [Install](#install)
+* [Examples](#examples)
+* [Docker](#docker)
+* [Customization](#customization)
+* [Navigation](#navigation)
+* [Finders](#finders)
+* [Screenshots](#screenshots)
+* [Cleaning Up](#cleaning-up)
+* [Network](#network)
+* [Proxy](#proxy)
+* [Mouse](#mouse)
+* [Keyboard](#keyboard)
+* [Cookies](#cookies)
+* [Headers](#headers)
+* [JavaScript](#javascript)
+* [Frames](#frames)
+* [Frame](#frame)
+* [Dialogs](#dialogs)
+* [Animation](#animation)
+* [Node](#node)
+* [Tracing](#tracing)
+* [Thread safety](#thread-safety)
+* [Development](#development)
+* [Contributing](#contributing)
+* [License](#license)
 * [Selenoid](#selenoid)
 
 
@@ -64,7 +64,7 @@ official source for [Chrome](https://www.google.com/chrome/) or
 [Chromium](https://www.chromium.org/getting-involved/download-chromium).
 Chrome binary should be in the `PATH` or `BROWSER_PATH` or you can pass it as an
 option to browser instance see `:browser_path` in
-[Customization](https://github.com/rubycdp/ferrum#customization).
+[Customization](#customization).
 
 Add this to your `Gemfile` and run `bundle install`.
 
@@ -182,7 +182,7 @@ Ferrum::Browser.new(options)
   * `:ws_max_receive_size` (Integer) - How big messages to accept from Chrome
       over the web socket, in bytes. Defaults to 64MB. Incoming messages larger
       than this will cause a `Ferrum::DeadBrowserError`.
-  * `:proxy` (Hash) - Specify proxy settings, [read more](https://github.com/rubycdp/ferrum#proxy)
+  * `:proxy` (Hash) - Specify proxy settings, [read more](#proxy)
   * `:save_path` (String) - Path to save attachments with [Content-Disposition](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Disposition) header.
   * `:env` (Hash) - Environment variables you'd like to pass through to the process
 
@@ -1105,8 +1105,8 @@ browser.playback_rate # => 2000
 #### frame_id
 #### frame  : `Frame`
 
-Returns [Frame](https://github.com/rubycdp/ferrum#frame) object for current node, you can keep using
-[Finders](https://github.com/rubycdp/ferrum#Finders) for that object:
+Returns [Frame](#frame) object for current node, you can keep using
+[Finders](#Finders) for that object:
 
 ```ruby
 frame =  browser.at_xpath("//iframe").frame # => Frame
@@ -1248,7 +1248,7 @@ push git commits and the created tag, and push the `.gem` file to [rubygems.org]
 
 ## Contributing
 
-Bug reports and pull requests are welcome on [GitHub](https://github.com/rubycdp/ferrum).
+Bug reports and pull requests are welcome on [GitHub](https://github.com/evosoftdev/ferrum).
 
 ## License
 
