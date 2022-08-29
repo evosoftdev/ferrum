@@ -1274,5 +1274,12 @@ browser.at_css('a').click
 ```
 
 `eaa59a10003231f2a370a8df893ad7da` is a `sessionId` from `curl` response.
+
 You can find a `curl` query in `Selenoid` web server (see `selenoid-ui` above).
-Start `selenoid-ui` on `8080` port and go to `http://localhost:8080/#/capabilities/`, than chose `Curl`. Execute curl in terminal.
+* start `selenoid-ui` on `8080` port;
+* go to `http://localhost:8080/#/capabilities/`;
+* chose `Curl`. Execute `curl` in your terminal.
+* find `sessionId` in response.
+
+A new `ws_url` is `ws://localhost:4444/devtools/[sessionId]`
+* `4444` - is a port of a `selenoid` container (see above).
