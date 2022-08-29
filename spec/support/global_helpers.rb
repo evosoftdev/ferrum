@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 RSpec.shared_context "Global helpers" do
-  attr_reader :browser
-
   def server
     Ferrum::Server.server
   end
@@ -12,7 +10,7 @@ RSpec.shared_context "Global helpers" do
   end
 
   def page
-    @page ||= @browser.create_page
+    @page ||= browser.create_page
   end
 
   def network
@@ -28,7 +26,7 @@ RSpec.shared_context "Global helpers" do
   end
 
   def reset
-    @browser.reset
+    browser.reset
     @page = nil
   end
 

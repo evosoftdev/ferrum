@@ -55,11 +55,8 @@ module Ferrum
       @browser = browser
       @target_id = target_id
       @event = Event.new.tap(&:set)
-
-      host = @browser.process.host
-      port = @browser.process.port
-      ws_url = "ws://#{host}:#{port}/devtools/page/#{@target_id}"
-      @client = Browser::Client.new(browser, ws_url, id_starts_with: 1000)
+      # TODO: use browser.client instead own @client
+      @client = browser.client.increase_command_id! 1000
 
       @mouse = Mouse.new(self)
       @keyboard = Keyboard.new(self)
@@ -167,11 +164,9 @@ module Ferrum
       @browser.command("Browser.getWindowForTarget", targetId: @target_id)["windowId"]
     end
 
-    # rubocop:disable Naming/AccessorMethodName
     def set_window_bounds(bounds = {})
       @browser.command("Browser.setWindowBounds", windowId: window_id, bounds: bounds)
     end
-    # rubocop:enable Naming/AccessorMethodName
 
     def command(method, wait: 0, slowmoable: false, **params)
       iteration = @event.reset if wait.positive?
@@ -252,6 +247,8 @@ module Ferrum
     end
 
     def prepare_page
+      @client.session! context.default_target.session_id
+
       command("Page.enable")
       command("Runtime.enable")
       command("DOM.enable")

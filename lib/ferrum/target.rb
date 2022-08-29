@@ -12,6 +12,7 @@ module Ferrum
       @page = nil
       @browser = browser
       @params = params
+      @sessions_ids = Concurrent::Array.new
     end
 
     def update(params)
@@ -60,6 +61,19 @@ module Ferrum
     def maybe_sleep_if_new_window
       # Dirty hack because new window doesn't have events at all
       sleep(NEW_WINDOW_WAIT) if window?
+    end
+
+    # @return [String]
+    def session_id
+      @sessions_ids.first || add_session
+    end
+
+    # @return [String]
+    def add_session
+      session = @browser.command "Target.attachToTarget", targetId: id, flatten: true
+      session_id = session.fetch "sessionId"
+      @sessions_ids.push session_id
+      session_id
     end
   end
 end

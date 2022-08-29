@@ -8,12 +8,18 @@ module Ferrum
     class Client
       INTERRUPTIONS = %w[Fetch.requestPaused Fetch.authRequired].freeze
 
+      # @param [Browser] browser
+      # @param [String] ws_url
+      # @param [Integer] id_starts_with
       def initialize(browser, ws_url, id_starts_with: 0)
         @browser = browser
         @command_id = id_starts_with
         @pendings = Concurrent::Hash.new
         @ws = WebSocket.new(ws_url, @browser.ws_max_receive_size, @browser.logger)
         @subscriber, @interrupter = Subscriber.build(2)
+        @session_id = nil
+
+        message_base!
 
         @thread = Thread.new do
           Thread.current.abort_on_exception = true
@@ -70,10 +76,29 @@ module Ferrum
         @thread.kill unless @thread.join(1)
       end
 
+      # @param [String] session_id
+      def session!(session_id)
+        @session_id = session_id
+        message_base!
+      end
+
+      # @return [String]
+      def session_id
+        @session_id
+      end
+
+      # @param [Integer] value
+      def increase_command_id!(value)
+        @command_id += value
+        self
+      end
+
       private
 
       def build_message(method, params)
-        { method: method, params: params }.merge(id: next_command_id)
+        @message_base.merge method: method,
+                            params: params,
+                            id: next_command_id
       end
 
       def next_command_id
@@ -96,6 +121,10 @@ module Ferrum
         else
           raise BrowserError, error
         end
+      end
+
+      def message_base!
+        @message_base = @session_id.nil? ? {} : { sessionId: @session_id }
       end
     end
   end
